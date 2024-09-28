@@ -1,0 +1,27 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "online pharmacy",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GK-NETHMI/online_pharmacy.git"
+  },
+  "author": "kaveesha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GK-NETHMI/online_pharmacy/issues"
+  },
+  "homepage": "https://github.com/GK-NETHMI/online_pharmacy#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "mongoose": "^8.7.0",
+    "nodemon": "^3.1.7"
+  }
+}
