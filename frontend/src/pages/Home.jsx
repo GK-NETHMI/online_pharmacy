@@ -28,7 +28,8 @@ const Home = () => {
               animate={{ x: [0, -10, 0] }} // Slide effect
               transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }} // Continuous animation
             >
-              Welcome to <span className="text-[#A67C52]">MediTrust</span> Online Pharmacy
+              <p>Welcome to </p>
+              <span className="text-[#A67C52]">MediTrust</span> Online Pharmacy
             </motion.h1>
 
             <motion.p 

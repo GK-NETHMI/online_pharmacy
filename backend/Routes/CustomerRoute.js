@@ -32,21 +32,20 @@ router.get('/:id', async(req, res) => {
 // Create a new customer
 
 router.post('/', async (req, res) => {
-    const customer = new Customer({
+    try {
+         const newCustomer = {
         CusID: req.body.CusID,
         CusName: req.body.CusName,
         CusEmail: req.body.CusEmail,
         CusPhone: req.body.CusPhone,
-        CusAddress: req.body.phone,
+        CusAddress: req.body.CusAddress,
         CusPassword: req.body.CusPassword,
         CusAge: req.body.CusAge,
         CusGender: req.body.CusGender,
         CusProfile: req.body.CusProfile,
-    });
-
-    try {
-        const newCustomer = await Customer.save();
-        res.status(201).json(newCustomer);
+    };
+        const createdCustomer = await Customer.create(newCustomer);
+        return res.status(201).send(createdCustomer);
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -54,7 +53,7 @@ router.post('/', async (req, res) => {
 
 // Update a customer
 
-router.patch('/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
         const customer = await Customer.findByIdAndUpdate(req.params.id, req.body, {new: true});
         if (!customer) {
