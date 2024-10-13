@@ -19,7 +19,7 @@ const CustomerForm = () => {
 
   const [errors, setErrors] = useState({});
   const [showConfirmPassword, setShowConfirmPassword] = useState(false); // To control confirm password field visibility
-  const [showPersonalInfo, setShowPersonalInfo] = useState(true); // Toggle Personal Info section
+  const [showPersonalInfo, setShowPersonalInfo] = useState(false); // Toggle Personal Info section
   const [showAccountInfo, setShowAccountInfo] = useState(false); // Toggle Account Info section
 
   const navigate = useNavigate();
@@ -45,16 +45,33 @@ const CustomerForm = () => {
     return phoneRegex.test(CusPhone);
   };
 
+  const validateUSername = (CusID) => {
+    const usernameRegex = /^[a-zA-Z0-9]{6,}$/;
+    return usernameRegex.test(CusID);
+  };
+
+  const validatePassword = (CusPassword) => {
+    const passwordRegex = /^(?=.[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    return passwordRegex.test(CusPassword);
+  };
+
   const validate = () => {
     const newErrors = {};
     
-    if (!formData.CusID) newErrors.CusID = "Username is required";
+    if (!formData.CusID) {
+      newErrors.CusID = "Username is required";
+    }else if (!validateUSername(formData.CusID)) {
+      newErrors.CusID = "Username must be alphanumeric and have at least 7 characters";
+    }
+    
     if (!formData.CusName) newErrors.CusName = "Name is required";
+
     if (!formData.CusEmail) {
       newErrors.CusEmail = "Email is required";
     } else if (!validateEmail(formData.CusEmail)) {
       newErrors.CusEmail = "Invalid email format";
     }
+
     if (!formData.CusPhone) {
       newErrors.CusPhone = "Phone number is required";
     } else if (!validatePhone(formData.CusPhone)) {
@@ -63,9 +80,13 @@ const CustomerForm = () => {
     if (!formData.CusAddress) newErrors.CusAddress = "Address is required";
     if (!formData.CusAge) newErrors.CusAge = "Age is required";
     if (!formData.CusGender) newErrors.CusGender = "Gender is required";
+
     if (!formData.CusPassword) {
       newErrors.CusPassword = "Password is required";
-    } else if (formData.CusPassword !== formData.CusConfirmPassword) {
+    } else if (!validatePassword(formData.CusPassword)) {
+      newErrors.CusPassword = "Password must be at least 6 characters and contain at least one uppercase letter, a number, and one special character";
+    }
+     if (formData.CusPassword !== formData.CusConfirmPassword) {
       newErrors.CusConfirmPassword = "Passwords do not match";
     }
     
@@ -245,7 +266,7 @@ const CustomerForm = () => {
                     name="CusID"
                     value={formData.CusID}
                     onChange={handleChange}
-                    placeholder='Tomy123...'
+                    placeholder='Tomy123'
                     className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-[#6B9080] transition"
                     required
                   />
@@ -262,6 +283,9 @@ const CustomerForm = () => {
                     className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-[#6B9080] transition"
                     required
                   />
+                    <small className="text-gray-500">
+                    Password must be at least 6 characters, include  uppercase letters, one number, and one special character.
+                    </small>
                   {errors.CusPassword && <p className="text-red-500 text-xs">{errors.CusPassword}</p>}
                 </div>
 
