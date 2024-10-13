@@ -1,6 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const navigate = useNavigate();
+
+  const handleProfile = () => navigate('/customers/viewone')
+
   return (
     <header className="bg-[#F5E0C3] shadow-md py-4">
       <div className="container mx-auto flex items-center justify-between px-5">
@@ -34,7 +39,7 @@ const Header = () => {
           </div>
           {/* Profile Icon */}
           <div className="relative">
-            <button className="text-[#6B9080] hover:text-[#557F6C]">
+            <button onClick={handleProfile} className="text-[#6B9080] hover:text-[#557F6C]">
               👤
             </button>
           </div>

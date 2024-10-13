@@ -35,14 +35,14 @@ const CustomerForm = () => {
     }
   };
 
-  const validateEmail = (email) => {
+  const validateEmail = (CusEmail) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    return emailRegex.test(CusEmail);
   };
 
-  const validatePhone = (phone) => {
+  const validatePhone = (CusPhone) => {
     const phoneRegex = /^\d{10}$/; // Adjust this regex based on your phone format
-    return phoneRegex.test(phone);
+    return phoneRegex.test(CusPhone);
   };
 
   const validate = () => {
@@ -283,7 +283,7 @@ const CustomerForm = () => {
                 <div className="mb-4">
                   <label className="block mb-2 text-gray-700" htmlFor="CusProfile">Upload Profile</label>
                   <input
-                    type="text"
+                    type="file"
                     name="CusProfile"
                     onChange={handleChange}
                     className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-[#6B9080] transition"

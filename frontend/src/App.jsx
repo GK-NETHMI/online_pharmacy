@@ -14,7 +14,7 @@ const App = () => {
     
     <Route path='/customers/create' element={<CreateCustomer/>}/>
     <Route path='/customers/edit/:id' element={<EditCustomer/>}/>
-    <Route path='/customers/view' element={<ViewOneCustomer/>}/>
+    <Route path='/customers/viewone' element={<ViewOneCustomer/>}/>
     <Route path='/customers/all' element={<AllCustomer/>}/>
     </Routes>
   )
