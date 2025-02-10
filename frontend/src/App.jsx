@@ -16,7 +16,7 @@ import EditEmployee from "./pages/Employee/EditEmployee";
 import CreateOrder from "./pages/Order/CreateOrder";
 import ViewOneOrder from "./pages/Order/ViewOneOrder";
 import AllOrder from "./pages/Order/AllOrder";
-import EditOrder from "./pages/Order/EditOrder";
+import EditOrder from "./pages/Order/EditOrders";
 
 import CreateProduct from "./pages/Product/CreateProduct";
 import EditProduct from "./pages/Product/EditProduct";

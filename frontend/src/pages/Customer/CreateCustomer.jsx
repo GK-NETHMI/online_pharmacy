@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import axios from 'axios'; 
+import axios from 'axios';
 
 const CustomerForm = () => {
   const [formData, setFormData] = useState({
@@ -25,8 +25,12 @@ const CustomerForm = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, type, files } = e.target;
+    if (type === 'file') {
+      setFormData({ ...formData, [name]: files[0] }); // Handle file input for profile
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
 
     if (name === 'CusPassword' && value) {
       setShowConfirmPassword(true); // Show confirm password field when password is entered
@@ -45,25 +49,25 @@ const CustomerForm = () => {
     return phoneRegex.test(CusPhone);
   };
 
-  const validateUSername = (CusID) => {
+  const validateUsername = (CusID) => {
     const usernameRegex = /^[a-zA-Z0-9]{6,}$/;
     return usernameRegex.test(CusID);
   };
 
   const validatePassword = (CusPassword) => {
-    const passwordRegex = /^(?=.[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
     return passwordRegex.test(CusPassword);
   };
 
   const validate = () => {
     const newErrors = {};
-    
+
     if (!formData.CusID) {
       newErrors.CusID = "Username is required";
-    }else if (!validateUSername(formData.CusID)) {
-      newErrors.CusID = "Username must be alphanumeric and have at least 7 characters";
+    } else if (!validateUsername(formData.CusID)) {
+      newErrors.CusID = "Username must be alphanumeric and have at least 6 characters";
     }
-    
+
     if (!formData.CusName) newErrors.CusName = "Name is required";
 
     if (!formData.CusEmail) {
@@ -77,6 +81,7 @@ const CustomerForm = () => {
     } else if (!validatePhone(formData.CusPhone)) {
       newErrors.CusPhone = "Phone number must be 10 digits";
     }
+
     if (!formData.CusAddress) newErrors.CusAddress = "Address is required";
     if (!formData.CusAge) newErrors.CusAge = "Age is required";
     if (!formData.CusGender) newErrors.CusGender = "Gender is required";
@@ -86,10 +91,11 @@ const CustomerForm = () => {
     } else if (!validatePassword(formData.CusPassword)) {
       newErrors.CusPassword = "Password must be at least 6 characters and contain at least one uppercase letter, a number, and one special character";
     }
-     if (formData.CusPassword !== formData.CusConfirmPassword) {
+
+    if (formData.CusPassword !== formData.CusConfirmPassword) {
       newErrors.CusConfirmPassword = "Passwords do not match";
     }
-    
+
     return newErrors;
   };
 
@@ -99,35 +105,40 @@ const CustomerForm = () => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-        try {
-             await axios.post('http://localhost:8071/customers', formData); // POST request to the backend
-    
-            // Show success message using SweetAlert2
-            Swal.fire({
-              title: 'Success!',
-              text: 'Customer registration completed successfully.',
-              icon: 'success',
-              confirmButtonText: 'OK'
-            }).then(() => {
-              // Navigate to '/customers/all' after successful submission
-              navigate('/customers/all');
-            });
-    
-      setFormData({
-        CusID: '',
-        CusName: '',
-        CusEmail: '',
-        CusPhone: '',
-        CusAddress: '',
-        CusPassword: '',
-        CusConfirmPassword: '',
-        CusAge: '',
-        CusGender: '',
-        CusProfile: ''
-      });
-      setErrors({});
-      setShowConfirmPassword(false); // Hide confirm password after form submission
-    }catch (error) {
+      const formDataToSend = new FormData();
+      for (const key in formData) {
+        formDataToSend.append(key, formData[key]);
+      }
+
+      try {
+        await axios.post('http://localhost:8071/customers', formDataToSend); // POST request to the backend
+
+        // Show success message using SweetAlert2
+        Swal.fire({
+          title: 'Success!',
+          text: 'Customer registration completed successfully.',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          // Navigate to '/customers/all' after successful submission
+          navigate('/customers/all');
+        });
+
+        setFormData({
+          CusID: '',
+          CusName: '',
+          CusEmail: '',
+          CusPhone: '',
+          CusAddress: '',
+          CusPassword: '',
+          CusConfirmPassword: '',
+          CusAge: '',
+          CusGender: '',
+          CusProfile: ''
+        });
+        setErrors({});
+        setShowConfirmPassword(false); // Hide confirm password after form submission
+      } catch (error) {
         // Handle any errors during submission
         Swal.fire({
           title: 'Error!',
@@ -149,7 +160,7 @@ const CustomerForm = () => {
     >
       <div className="bg-white bg-opacity-80 rounded-lg shadow-lg p-8 max-w-md w-full">
         <h2 className="text-2xl font-bold text-center mb-6 text-[#6B9080]">Customer Registration</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
 
           {/* Collapsible Personal Information Section */}
           <div className="mb-4">
@@ -229,19 +240,31 @@ const CustomerForm = () => {
                 </div>
 
                 <div className="mb-4">
-                  <label className="block mb-2 text-gray-700" htmlFor="CusGender">Gender</label>
-                  <select
-                    name="CusGender"
-                    value={formData.CusGender}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-[#6B9080] transition"
-                    required
-                  >
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                  </select>
+                  <label className="block mb-2 text-gray-700">Gender</label>
+                  <div className="flex items-center gap-4">
+                    <label>
+                      <input
+                        type="radio"
+                        name="CusGender"
+                        value="Male"
+                        checked={formData.CusGender === 'Male'}
+                        onChange={handleChange}
+                        className="mr-2"
+                      />
+                      Male
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="CusGender"
+                        value="Female"
+                        checked={formData.CusGender === 'Female'}
+                        onChange={handleChange}
+                        className="mr-2"
+                      />
+                      Female
+                    </label>
+                  </div>
                   {errors.CusGender && <p className="text-red-500 text-xs">{errors.CusGender}</p>}
                 </div>
               </div>
@@ -266,7 +289,6 @@ const CustomerForm = () => {
                     name="CusID"
                     value={formData.CusID}
                     onChange={handleChange}
-                    placeholder='Tomy123'
                     className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-[#6B9080] transition"
                     required
                   />
@@ -283,11 +305,10 @@ const CustomerForm = () => {
                     className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-[#6B9080] transition"
                     required
                   />
-                    <small className="text-gray-500">
+                  {errors.CusPassword && <p className="text-red-500 text-xs">{errors.CusPassword}</p>}
+                </div>  <small className="text-gray-500">
                     Password must be at least 6 characters, include  uppercase letters, one number, and one special character.
                     </small>
-                  {errors.CusPassword && <p className="text-red-500 text-xs">{errors.CusPassword}</p>}
-                </div>
 
                 {showConfirmPassword && (
                   <div className="mb-4">
@@ -305,10 +326,11 @@ const CustomerForm = () => {
                 )}
 
                 <div className="mb-4">
-                  <label className="block mb-2 text-gray-700" htmlFor="CusProfile">Upload Profile</label>
+                  <label className="block mb-2 text-gray-700" htmlFor="CusProfile">Profile Picture</label>
                   <input
                     type="file"
                     name="CusProfile"
+                    accept="image/*"
                     onChange={handleChange}
                     className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-[#6B9080] transition"
                   />
@@ -319,9 +341,9 @@ const CustomerForm = () => {
 
           <button
             type="submit"
-            className="w-full bg-[#6B9080] text-white font-bold py-2 px-4 rounded hover:bg-green-700 transition w-[150px]"
+            className="w-full bg-[#6B9080] text-white p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#6B9080] transition"
           >
-            Register
+            Register Customer
           </button>
         </form>
       </div>

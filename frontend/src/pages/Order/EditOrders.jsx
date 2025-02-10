@@ -1,6 +1,6 @@
 import React from 'react'
 
-function EditEmployee() {
+function Editorder() {
   return (
     <div>
       
@@ -8,4 +8,4 @@ function EditEmployee() {
   )
 }
 
-export default EditEmployee
+export default Editorder
