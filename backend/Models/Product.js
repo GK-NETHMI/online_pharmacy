@@ -29,7 +29,6 @@ const ProductSchema = new mongoose.Schema(
         },
         PImage: {
             type: String,
-            required: true
         },
     },
     {

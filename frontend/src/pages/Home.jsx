@@ -56,39 +56,46 @@ const Home = () => {
 
       {/* Featured Products Section */}
       <motion.section 
-        className="py-20"
-        initial={{ opacity: 0 }} 
-        animate={{ opacity: 1 }} 
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        <div className="container mx-auto px-5 text-center">
-          <h2 className="text-4xl font-bold text-[#3B3A30] mb-10">Featured Products</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {["Product 1", "Product 2", "Product 3"].map((product, index) => (
-              <motion.div 
-                key={index}
-                className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300"
-                initial={{ y: 50 }} 
-                animate={{ y: 0 }} 
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <img src="https://via.placeholder.com/300" alt={product} className="w-full h-48 object-cover" />
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-[#A67C52] mb-2">{product}</h3>
-                  <p className="text-gray-600">${(index + 1) * 25}.99</p>
-                  <motion.button 
-                    className="bg-[#6B9080] text-white px-4 py-2 mt-4 rounded-lg hover:bg-[#557F6C]"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Add to Cart
-                  </motion.button>
-                </div>
-              </motion.div>
-            ))}
+  className="py-20"
+  initial={{ opacity: 0 }} 
+  animate={{ opacity: 1 }} 
+  transition={{ duration: 0.5, delay: 0.2 }}
+>
+  <div className="container mx-auto px-5 text-center">
+    <h2 className="text-4xl font-bold text-[#3B3A30] mb-10">Featured Products</h2>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+      {[
+        { name: "Product 1", price: "$25.99", image: "https://images.pexels.com/photos/3882516/pexels-photo-3882516.jpeg" },
+        { name: "Product 2", price: "$35.99", image: "https://images.pexels.com/photos/3573619/pexels-photo-3573619.jpeg" },
+        { name: "Product 3", price: "$45.99", image: "https://images.pexels.com/photos/6786881/pexels-photo-6786881.jpeg" },
+        { name: "Product 4", price: "$55.99", image: "https://images.pexels.com/photos/4778559/pexels-photo-4778559.jpeg" },
+        { name: "Product 5", price: "$65.99", image: "https://images.pexels.com/photos/5742202/pexels-photo-5742202.jpeg" },
+        { name: "Product 6", price: "$75.99", image: "https://images.pexels.com/photos/3184137/pexels-photo-3184137.jpeg" }
+      ].map((product, index) => (
+        <motion.div 
+          key={index}
+          className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300"
+          initial={{ y: 50 }} 
+          animate={{ y: 0 }} 
+          transition={{ duration: 0.5, delay: index * 0.1 }}
+        >
+          <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
+          <div className="p-6">
+            <h3 className="text-xl font-bold text-[#A67C52] mb-2">{product.name}</h3>
+            <p className="text-gray-600">{product.price}</p>
+            <motion.button 
+              className="bg-[#6B9080] text-white px-4 py-2 mt-4 rounded-lg hover:bg-[#557F6C]"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Add to Cart
+            </motion.button>
           </div>
-        </div>
-      </motion.section>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+</motion.section>
 
       {/* Call to Action Section */}
       <motion.section 

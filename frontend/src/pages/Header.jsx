@@ -16,13 +16,13 @@ const Header = () => {
 
         {/* Navigation */}
         <nav className="space-x-6">
-          <a href="#" className="text-[#3B3A30] hover:text-[#6B9080]">
+          <a href="/home" className="text-[#3B3A30] hover:text-[#6B9080]">
             Home
           </a>
           <a href="#" className="text-[#3B3A30] hover:text-[#6B9080]">
             Shop
           </a>
-          <a href="#" className="text-[#3B3A30] hover:text-[#6B9080]">
+          <a href="./about" className="text-[#3B3A30] hover:text-[#6B9080]">
             About
           </a>
           <a href="#" className="text-[#3B3A30] hover:text-[#6B9080]">
