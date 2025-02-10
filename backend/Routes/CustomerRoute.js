@@ -1,83 +1,74 @@
 import express from 'express';
-import mongoose from 'mongoose';
-import {Customer} from '../Models/Customer.js';
+import { Customer } from '../Models/Customer.js'; // Adjust path if necessary
 
 const router = express.Router();
 
-// Get all customers
+// Create Customer
+router.post('/customer', async (req, res) => {
+    try {
+        const newCustomer = new Customer({
+            CusName: req.body.CusName,
+            CusEmail: req.body.CusEmail,
+            CusPhone: req.body.CusPhone,
+            CusAddress: req.body.CusAddress,
+            CusPassword: req.body.CusPassword,
+            CusAge: req.body.CusAge,
+            CusGender: req.body.CusGender,
+            CusProfile: req.body.CusProfile,
+        });
 
-router.get('/', async (req, res) => {
+        await newCustomer.save();
+        res.status(201).json(newCustomer);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Get All Customers
+router.get('/customer', async (req, res) => {
     try {
         const customers = await Customer.find();
-        res.json(customers);
-    } catch (err) {
-        res.status(500).json({message: err.message});
+        res.status(200).json(customers);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 
-// Get a single customer
-
-router.get('/:id', async(req, res) => {
-    try{
-        const customer = await Customer.findById(req.params.id);
-        if (!customer) {
-            return res.status(404).json({message: 'Customer not found'});
-        }
-        res.json(customer);
-    } catch (err) {
-        res.status(500).json({message: err.message});
-    }
-});
-
-// Create a new customer
-
-router.post('/', async (req, res) => {
+// Get Customer by ID
+router.get('/customer/:id', async (req, res) => {
     try {
-         const newCustomer = {
-        CusID: req.body.CusID,
-        CusName: req.body.CusName,
-        CusEmail: req.body.CusEmail,
-        CusPhone: req.body.CusPhone,
-        CusAddress: req.body.CusAddress,
-        CusPassword: req.body.CusPassword,
-        CusAge: req.body.CusAge,
-        CusGender: req.body.CusGender,
-        CusProfile: req.body.CusProfile,
-    };
-        const createdCustomer = await Customer.create(newCustomer);
-        return res.status(201).send(createdCustomer);
-    } catch (err) {
-        res.status(400).json({message: err.message});
+        const customer = await Customer.findOne({ CusID: req.params.id });
+        if (!customer) return res.status(404).json({ message: 'Customer not found' });
+        res.status(200).json(customer);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 
-// Update a customer
-
-router.put('/:id', async (req, res) => {
+// Update Customer
+router.put('/customer/:id', async (req, res) => {
     try {
-        const customer = await Customer.findByIdAndUpdate(req.params.id, req.body, {new: true});
-        if (!customer) {
-            return res.status(404).json({message: 'Customer not found'});
-        }
-        res.json(customer);
-    } catch (err) {
-        res.status(500).json({message: err.message});
+        const customer = await Customer.findOneAndUpdate(
+            { CusID: req.params.id },
+            req.body,
+            { new: true }
+        );
+        if (!customer) return res.status(404).json({ message: 'Customer not found' });
+        res.status(200).json(customer);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 
-// Delete a customer
-
-router.delete('/:id', async (req, res) => {
+// Delete Customer
+router.delete('/customer/:id', async (req, res) => {
     try {
-        const customer = await Customer.findByIdAndDelete(req.params.id);
-        if (!customer) {
-            return res.status(404).json({message: 'Customer not found'});
-        }
-        res.json({message: 'Customer deleted'});
-    } catch (err) {
-        res.status(500).json({message: err.message});
+        const customer = await Customer.findOneAndDelete({ CusID: req.params.id });
+        if (!customer) return res.status(404).json({ message: 'Customer not found' });
+        res.status(200).json({ message: 'Customer deleted' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 
 export default router;
-

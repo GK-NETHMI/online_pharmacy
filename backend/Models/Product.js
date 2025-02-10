@@ -36,18 +36,19 @@ const ProductSchema = new mongoose.Schema(
     }
 );
 
-// Pre-save hook to generate PID with a custom pattern before saving
-ProductSchema.pre('save', async function (next) {
+// Auto-generate PID with pattern "Product001", "Product002", ...
+ProductSchema.pre("save", async function (next) {
     if (!this.PID) {
-        // Example of generating a unique PID like 'PRD-XXXXXX' where X is a random number
-        const randomID = Math.floor(100000 + Math.random() * 900000); // Generates a random 6-digit number
-        this.PID = `PRD-${randomID}`;
+        const lastProduct = await mongoose.model("Product").findOne().sort({ PID: -1 });
+        let newID = "Product001"; // Default if no products exist
 
-        // Optionally: Ensure uniqueness by checking the database (if you want to avoid random collision)
-        const existingProduct = await mongoose.models.Product.findOne({ PID: this.PID });
-        if (existingProduct) {
-            return next(new Error('PID collision detected, please try again.'));
+        if (lastProduct && lastProduct.PID) {
+            const lastNumber = parseInt(lastProduct.PID.replace("Product", ""), 10);
+            const nextNumber = lastNumber + 1;
+            newID = `Product${String(nextNumber).padStart(3, "0")}`;
         }
+
+        this.PID = newID;
     }
     next();
 });

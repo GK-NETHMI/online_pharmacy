@@ -1,43 +1,64 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const CustomerSchema = mongoose.Schema(
+const CustomerSchema = new mongoose.Schema(
     {
-        CusID:{
+        CusID: {
             type: String,
-            required: true,
+            unique: true
         },
-        CusName:{
+        CusName: {
             type: String,
-            required: true,
+            required: true
         },
-        CusEmail:{
+        CusEmail: {
             type: String,
-            required: true,
+            required: true
         },
-        CusPhone:{
+        CusPhone: {
             type: String,
-            required: true,
+            required: true
         },
-        CusAddress:{
+        CusAddress: {
             type: String,
-            required: true,
+            required: true
         },
-        CusPassword:{
+        CusPassword: {
             type: String,
-            required: true,
+            required: true
         },
-        CusAge:{
+        CusAge: {
             type: Number,
-            required: true,
+            required: true
         },
-        CusGender:{
+        CusGender: {
             type: String,
-            required: true,
+            required: true
         },
-        CusProfile:{
-            type: String,
+        CusProfile: {
+            type: String
         },
+    },
+    {
+        timestamps: true // Automatically adds createdAt and updatedAt fields
     }
-)
+);
 
-export const Customer = mongoose.model('Customer', CustomerSchema);
+// Auto-generate CusID with pattern "Cus0001M", "Cus0002M", ...
+CustomerSchema.pre("save", async function (next) {
+    if (!this.CusID) {
+        const lastCustomer = await mongoose.model("Customer").findOne().sort({ CusID: -1 });
+        let newID = "Cus0001M"; // Default if no customers exist
+
+        if (lastCustomer && lastCustomer.CusID) {
+            const lastNumber = parseInt(lastCustomer.CusID.replace("Cus", "").replace("M", ""), 10);
+            const nextNumber = lastNumber + 1;
+            newID = `Cus${String(nextNumber).padStart(4, "0")}M`;
+        }
+
+        this.CusID = newID;
+    }
+    next();
+});
+
+// Create and export the Customer model
+export const Customer = mongoose.model("Customer", CustomerSchema);

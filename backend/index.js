@@ -6,14 +6,17 @@ import { PORT, mongoDBURL } from './config.js';
 
 import  CustomerRoute from './Routes/CustomerRoute.js';
 import  ProductRoute from './Routes/ProductRoute.js';
+import  EmpRoute from './Routes/EmpRoute.js';
+import  OrderRoute from './Routes/OrderRoute.js';
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use('/customers',CustomerRoute);
-app.use('/products',ProductRoute);
-
+app.use('/customer',CustomerRoute);
+app.use('/product',ProductRoute);
+app.use('/emp',EmpRoute);
+app.use('/order',OrderRoute);
 
 
 
