@@ -1,6 +1,18 @@
 {
   "dependencies": {
     "framer-motion": "^11.9.0",
+    "nodemon": "^3.1.9",
     "sweetalert2": "^11.14.1"
-  }
+  },
+  "name": "online_pharmacy",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
