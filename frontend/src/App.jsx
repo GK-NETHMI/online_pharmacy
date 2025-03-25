@@ -2,8 +2,9 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
+import Login from "./pages/login";
+import SignUp from "./pages/SignUp";
 
-import CreateCustomer from "./pages/Customer/CreateCustomer";
 import EditCustomer from "./pages/Customer/EditCustomer";
 import ViewOneCustomer from "./pages/Customer/ViewOneCustomer";
 import AllCustomer from "./pages/Customer/AllCustomer";
@@ -29,8 +30,9 @@ const App = () => {
     <Routes>
     <Route path='/home' element={<Home/>}/>
     <Route path='/about' element={<About/>}/>
-    
-    <Route path='/customer/create' element={<CreateCustomer/>}/>
+    <Route path='/' element={<Login/>}/>
+    <Route path='/register' element={<SignUp/>}/>
+
     <Route path='/customer/edit/:id' element={<EditCustomer/>}/>
     <Route path='/customer/viewone' element={<ViewOneCustomer/>}/>
     <Route path='/customer/all' element={<AllCustomer/>}/>

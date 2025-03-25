@@ -65,7 +65,7 @@ const About = () => {
         transition={{ duration: 1 }}
       >
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-4xl font-semibold text-blue-800 mb-6">Our Story</h2>
+          <h2 className="text-4xl font-semibold text-yellow-400 mb-6">Our Story</h2>
           <p className="text-lg text-gray-700 mb-10">
             MediTrust started with a vision to bridge the gap between accessible healthcare and trusted medication. We aim to make your healthcare journey easier, offering a wide variety of prescription and over-the-counter medicines at your fingertips.
           </p>
@@ -104,7 +104,7 @@ const About = () => {
         />
 
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-4xl font-semibold text-blue-800 mb-6">Our Mission</h2>
+          <h2 className="text-4xl font-semibold text-yellow-400 mb-6">Our Mission</h2>
           <p className="text-lg text-gray-700 mb-10">
             At MediTrust, our mission is to empower individuals to take control of their health through easy access to medications and consultations with professional pharmacists. We are committed to providing the best products and services with a focus on quality, convenience, and affordability.
           </p>
@@ -122,7 +122,7 @@ const About = () => {
         }}
         transition={{ duration: 1 }}
       >
-        <h2 className="text-4xl font-semibold text-blue-800 mb-6">Our Services</h2>
+        <h2 className="text-4xl font-semibold text-yellow-400 mb-6">Our Services</h2>
         <div className="flex flex-wrap justify-center gap-8">
           <motion.div
             className="bg-white p-8 rounded-lg shadow-xl max-w-xs"
@@ -133,7 +133,7 @@ const About = () => {
             }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <h3 className="text-xl font-semibold text-blue-800 mb-3">Prescription Fulfillment</h3>
+            <h3 className="text-xl font-semibold text-yellow-400 mb-3">Prescription Fulfillment</h3>
             <p className="text-gray-700 mb-3">
               Fast and reliable delivery of prescribed medications directly to your door.
             </p>
@@ -148,7 +148,7 @@ const About = () => {
             }}
             transition={{ duration: 0.8, delay: 0.5 }}
           >
-            <h3 className="text-xl font-semibold text-blue-800 mb-3">Health Consultations</h3>
+            <h3 className="text-xl font-semibold text-yellow-400 mb-3">Health Consultations</h3>
             <p className="text-gray-700 mb-3">
               Consult with professional pharmacists and get advice on your medications and health products.
             </p>
@@ -163,7 +163,7 @@ const About = () => {
             }}
             transition={{ duration: 0.8, delay: 0.7 }}
           >
-            <h3 className="text-xl font-semibold text-blue-800 mb-3">Free Delivery</h3>
+            <h3 className="text-xl font-semibold text-yellow-400 mb-3">Free Delivery</h3>
             <p className="text-gray-700 mb-3">
               Enjoy free, fast, and secure delivery of your medications with no extra cost.
             </p>
