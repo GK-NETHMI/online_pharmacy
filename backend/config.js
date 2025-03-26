@@ -1,3 +1,17 @@
-export const PORT = 8071;
+import dotenv from 'dotenv';
+dotenv.config();
 
-export const mongoDBURL = 'mongodb+srv://nethmikavee40:pharmacy123@cluster0.u2ee6.mongodb.net/pharmacy_db?retryWrites=true&w=majority&appName=Cluster0'; 
+const requiredVars = ['MONGO_URI', 'JWT_SECRET'];
+
+requiredVars.forEach(varName => {
+  if (!process.env[varName]) {
+    throw new Error(`Missing required environment variable: ${varName}`);
+  }
+});
+
+export default {
+  mongoURI: process.env.MONGO_URI,
+  port: process.env.PORT || 8071,
+  jwtSecret: process.env.JWT_SECRET,
+  allowedOrigins: process.env.ALLOWED_ORIGINS?.split(',') || []
+};

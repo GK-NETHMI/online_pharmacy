@@ -63,8 +63,8 @@ CustomerSchema.pre("save", async function (next) {
 });
 
 // Hash password before saving
-CustomerSchema.pre("save", async function (next) {
-  if (!this.isModified("CusPassword")) return next();
+CustomerSchema.pre('save', async function(next) {
+  if (!this.isModified('CusPassword')) return next();
   this.CusPassword = await bcrypt.hash(this.CusPassword, 12);
   next();
 });

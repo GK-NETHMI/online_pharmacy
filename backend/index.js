@@ -1,10 +1,8 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import cors from 'cors';
 import path from "path";
 import { fileURLToPath } from "url";
-
-import { PORT, mongoDBURL } from './config.js';
+import dotenv from 'dotenv';
 
 import  CustomerRoute from './Routes/CustomerRoute.js';
 import  ProductRoute from './Routes/ProductRoute.js';
@@ -26,24 +24,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+dotenv.config({ path: path.join(__dirname, '../.env') }); 
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: "Something broke!" });
   });
 
+  app.use(cors({
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  }));
 
 
-
-
-// Connecting to the MongoDB database
-mongoose.connect(mongoDBURL)
-    .then(() =>{ 
-        console.log('MongoDB connected...');
-        app.listen(PORT, () => {
-             console.log(`Server running on port ${PORT}`);
-        });
-    }).catch((error) =>{
-        console.log(error);
-    });
+  console.log(process.env.MONGO_URI);
     
