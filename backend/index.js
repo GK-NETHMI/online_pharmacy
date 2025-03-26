@@ -9,6 +9,7 @@ import  ProductRoute from './Routes/ProductRoute.js';
 import  EmpRoute from './Routes/EmpRoute.js';
 import  OrderRoute from './Routes/OrderRoute.js';
 
+require("dotenv").config();
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -37,6 +38,10 @@ app.use((err, req, res, next) => {
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   }));
 
+if (!process.env.JWT_SECRET) {
+  console.error("Error: JWT_SECRET is not defined or not loaded from .env");
+} else {
+  console.log("JWT_SECRET loaded successfully:", process.env.JWT_SECRET);
+}
 
   console.log(process.env.MONGO_URI);
-    
