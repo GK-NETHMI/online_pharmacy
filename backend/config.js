@@ -11,7 +11,7 @@ requiredVars.forEach(varName => {
 
 export default {
   mongoURI: process.env.MONGO_URI,
-  port: process.env.PORT || 8071,
+  port: process.env.PORT || 5000,
   jwtSecret: process.env.JWT_SECRET,
   allowedOrigins: process.env.ALLOWED_ORIGINS?.split(',') || []
 };

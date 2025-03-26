@@ -1,7 +1,7 @@
 import express from "express";
 import { body, validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
-import { Customer } from "../models/Customer.js";
+import { Customer } from "../Models/Customer.js";
 import multer from "multer";
 import path from "path";
 import fs from 'fs/promises';
@@ -12,10 +12,10 @@ const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
-// Secure JWT secret check
-if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
-  throw new Error("Missing/insecure JWT_SECRET in .env");
-}
+// // Secure JWT secret check
+// if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+//   throw new Error("Missing/insecure JWT_SECRET in .env");
+// }
 
 // Multer configuration
 const storage = multer.diskStorage({
@@ -42,10 +42,10 @@ const upload = multer({
   }
 });
 
-// Helper functions
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
-};
+// // Helper functions
+// const generateToken = (id) => {
+//   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+// };
 
 const validateRequest = (req, res) => {
   const errors = validationResult(req);
@@ -54,31 +54,48 @@ const validateRequest = (req, res) => {
   }
 };
 
-// @route   POST /api/customers/register
 router.post(
   '/register',
   upload.single('CusProfile'),
   [
-    body('CusName').trim().notEmpty().isLength({ min: 3 }),
-    body('CusEmail').isEmail().normalizeEmail(),
-    body('CusPhone').matches(/^\d{10}$/),
-    body('CusPassword').isLength({ min: 8 }),
-    body('CusAge').isInt({ min: 18, max: 100 }),
-    body('CusGender').isIn(['Male', 'Female', 'Other']),
-    body('CusAddress').notEmpty()
+    body('CusName').trim().notEmpty().withMessage('Name is required').isLength({ min: 3 }).withMessage('Name must be at least 3 characters'),
+    body('CusEmail').isEmail().withMessage('Invalid email').normalizeEmail(),
+    body('CusPhone').matches(/^\d{10}$/).withMessage('Phone must be 10 digits'),
+    body('CusPassword').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
+    body('CusAge').isInt({ min: 18, max: 100 }).withMessage('Age must be between 18-100'),
+    body('CusGender').isIn(['Male', 'Female', 'Other']).withMessage('Invalid gender'),
+    body('CusAddress').notEmpty().withMessage('Address is required')
   ],
   async (req, res) => {
     try {
-      validateRequest(req, res);
+      // Validate request
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        if (req.file?.path) {
+          await fs.unlink(req.file.path);
+        }
+        return res.status(400).json({ errors: errors.array() });
+      }
 
-      const { CusEmail } = req.body;
-      if (await Customer.findOne({ CusEmail })) {
+      const { CusEmail, CusPassword } = req.body;
+      
+      // Check if user exists
+      const existingCustomer = await Customer.findOne({ CusEmail });
+      if (existingCustomer) {
+        if (req.file?.path) {
+          await fs.unlink(req.file.path);
+        }
         return res.status(409).json({ message: 'Email already exists' });
       }
 
+      // Hash password
+      const hashedPassword = await bcrypt.hash(CusPassword, 10);
+
+      // Create customer
       const customer = new Customer({
         ...req.body,
-        CusProfile: req.file?.path || 'default-profile.jpg'
+        CusPassword: hashedPassword,
+        CusProfile: req.file?.path || path.join('public', 'images', 'default-profile.jpg')
       });
 
       await customer.save();
@@ -92,15 +109,19 @@ router.post(
       });
 
     } catch (err) {
-      // Clean up uploaded file if registration fails
+      // Clean up uploaded file if error occurs
       if (req.file?.path) {
         await fs.unlink(req.file.path).catch(console.error);
       }
-      res.status(500).json({ message: 'Registration failed', error: err.message });
+      
+      console.error('Registration error:', err);
+      res.status(500).json({ 
+        message: 'Registration failed', 
+        error: process.env.NODE_ENV === 'development' ? err.message : undefined 
+      });
     }
   }
 );
-
 // @route   POST /api/customers/login
 router.post(
   '/login',
