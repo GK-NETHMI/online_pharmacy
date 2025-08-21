@@ -20,7 +20,6 @@ import AllOrder from "./pages/Order/AllOrder";
 import EditOrder from "./pages/Order/EditOrders";
 
 import CreateProduct from "./pages/Product/CreateProduct";
-import EditProduct from "./pages/Product/EditProduct";
 import ViewOneProduct from "./pages/Product/ViewOneProduct";
 import AllProduct from "./pages/Product/AllProduct";
 
@@ -48,7 +47,6 @@ const App = () => {
     <Route path='/order/all' element={<AllOrder/>}/>
 
     <Route path='/product/create' element={<CreateProduct/>}/>
-    <Route path='/product/edit/:id' element={<EditProduct/>}/>
     <Route path='/product/viewone' element={<ViewOneProduct/>}/>
     <Route path='/product/all' element={<AllProduct/>}/>
   

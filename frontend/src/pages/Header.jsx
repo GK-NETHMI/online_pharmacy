@@ -19,7 +19,7 @@ const Header = () => {
             <Link to="/home" className="text-gray-800 hover:text-[#FFD700] transition-colors">
               Home
             </Link>
-            <Link to="/products" className="text-gray-800 hover:text-[#FFD700] transition-colors">
+            <Link to="/product/all" className="text-gray-800 hover:text-[#FFD700] transition-colors">
               Products
             </Link>
             <Link to="/about" className="text-gray-800 hover:text-[#FFD700] transition-colors">

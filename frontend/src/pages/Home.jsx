@@ -72,7 +72,7 @@ const Home = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="bg-[#FFD700] text-black px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-shadow"
-                  onClick={() => navigate('/products')}
+                  onClick={() => navigate('/product/all')}
                 >
                   Shop Now
                 </motion.button>

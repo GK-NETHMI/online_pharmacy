@@ -12,12 +12,64 @@ const SignUp = () => {
     CusAddress: '',
     CusPassword: '',
     CusAge: '',
-    CusGender: '',
-    CusProfile: ''
+    CusGender: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const errors = {};
+    
+    // Name validation
+    if (!formData.CusName.trim()) {
+      errors.CusName = 'Name is required';
+    } else if (formData.CusName.length < 3) {
+      errors.CusName = 'Name must be at least 3 characters';
+    }
+  
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.CusEmail) {
+      errors.CusEmail = 'Email is required';
+    } else if (!emailRegex.test(formData.CusEmail)) {
+      errors.CusEmail = 'Invalid email format';
+    }
+  
+    // Phone validation
+    const phoneRegex = /^\d{10}$/;
+    if (!formData.CusPhone) {
+      errors.CusPhone = 'Phone number is required';
+    } else if (!phoneRegex.test(formData.CusPhone)) {
+      errors.CusPhone = 'Phone number must be 10 digits';
+    }
+  
+    // Age validation
+    if (!formData.CusAge) {
+      errors.CusAge = 'Age is required';
+    } else if (formData.CusAge < 18 || formData.CusAge > 100) {
+      errors.CusAge = 'Age must be between 18 and 100';
+    }
+  
+    // Gender validation
+    if (!formData.CusGender) {
+      errors.CusGender = 'Please select a gender';
+    }
+  
+    // Address validation
+    if (!formData.CusAddress.trim()) {
+      errors.CusAddress = 'Address is required';
+    }
+  
+    // Password validation
+    if (!formData.CusPassword) {
+      errors.CusPassword = 'Password is required';
+    } else if (formData.CusPassword.length < 8) {
+      errors.CusPassword = 'Password must be at least 8 characters';
+    }
+  
+    return errors;
+  };
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -28,14 +80,6 @@ const SignUp = () => {
     }
   };
 
-  const validate = () => {
-    const newErrors = {};
-    if (!formData.CusProfile) {
-      newErrors.CusProfile = 'Profile picture is required';
-    }
-    return newErrors;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -44,18 +88,20 @@ const SignUp = () => {
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-    } else {
-      try {
-        const response = await axios.post('http://localhost:8071/customer', formData);
-        if (response.data) {
-          localStorage.setItem('user', JSON.stringify(response.data));
-          navigate('/home');
-        }
-      } catch (err) {
-        setError(err.response?.data?.message || 'Registration failed. Please try again.');
-      } finally {
-        setLoading(false);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:8071/customer', formData);
+      if (response.data) {
+        localStorage.setItem('user', JSON.stringify(response.data));
+        navigate('/home');
       }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -121,6 +167,11 @@ const SignUp = () => {
                 onChange={handleChange}
                 style={{ backdropFilter: 'blur(5px)' }}
               />
+              {errors.CusName && (
+                <p className="mt-1 text-red-400 text-sm">
+                  {errors.CusName}
+                </p>
+              )}
             </motion.div>
 
             <motion.div
@@ -138,6 +189,7 @@ const SignUp = () => {
                 onChange={handleChange}
                 style={{ backdropFilter: 'blur(5px)' }}
               />
+              {errors.CusEmail && <p className="text-red-500 text-sm mt-1">{errors.CusEmail}</p>}
             </motion.div>
 
             <motion.div
@@ -155,6 +207,7 @@ const SignUp = () => {
                 onChange={handleChange}
                 style={{ backdropFilter: 'blur(5px)' }}
               />
+              {errors.CusPhone && <p className="text-red-500 text-sm mt-1">{errors.CusPhone}</p>}
             </motion.div>
 
             <motion.div
@@ -172,6 +225,7 @@ const SignUp = () => {
                 onChange={handleChange}
                 style={{ backdropFilter: 'blur(5px)' }}
               />
+              {errors.CusAge && <p className="text-red-500 text-sm mt-1">{errors.CusAge}</p>}
             </motion.div>
 
             <motion.div
@@ -192,6 +246,7 @@ const SignUp = () => {
                 <option value="Female" className="text-gray-700">Female</option>
                 <option value="Other" className="text-gray-700">Other</option>
               </select>
+              {errors.CusGender && <p className="text-red-500 text-sm mt-1">{errors.CusGender}</p>}
             </motion.div>
 
             <motion.div
@@ -210,6 +265,7 @@ const SignUp = () => {
                 onChange={handleChange}
                 style={{ backdropFilter: 'blur(5px)' }}
               />
+              {errors.CusAddress && <p className="text-red-500 text-sm mt-1">{errors.CusAddress}</p>}
             </motion.div>
 
             <motion.div
@@ -228,25 +284,7 @@ const SignUp = () => {
                 onChange={handleChange}
                 style={{ backdropFilter: 'blur(5px)' }}
               />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1 }}
-              className="md:col-span-2"
-            >
-              <div className="mb-4">
-                <label className="block mb-2 text-gray-700" htmlFor="CusProfile">Profile Picture</label>
-                <input
-                  type="file"
-                  name="CusProfile"
-                  accept="image/*"
-                  onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-[#FFD700] transition"
-                />
-                {errors.CusProfile && <p className="text-red-500 text-xs">{errors.CusProfile}</p>}
-              </div>
+              {errors.CusPassword && <p className="text-red-500 text-sm mt-1">{errors.CusPassword}</p>}
             </motion.div>
           </div>
 
