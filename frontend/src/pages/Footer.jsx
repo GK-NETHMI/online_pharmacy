@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
+import logopng from '../images/logo.png'; 
 
 const Footer = () => {
   return (
@@ -11,7 +12,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-6">
             <Link to="/" className="flex items-center space-x-2">
-              <img src="/images/logo.png" alt="Logo" className="h-10" />
+              <img src={logopng} alt="Logo" className="h-16 w-auto" />
               <span className="text-xl font-bold">Medi Trust</span>
             </Link>
             <p className="text-gray-600">

@@ -4,6 +4,9 @@ import Footer from './Footer';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import feedbackImage from '../images/feedback.png';
+import { GiPlantWatering } from "react-icons/gi";
+import { MdVerified } from "react-icons/md";
+import { MdSentimentSatisfiedAlt } from "react-icons/md";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -132,7 +135,7 @@ const Home = () => {
               className="space-y-8"
             >
               <img
-                src="/images/product-detail.png"
+                src="https://images.pexels.com/photos/3612199/pexels-photo-3612199.jpeg"
                 alt="CBD Oil"
                 className="w-full max-w-md mx-auto"
               />
@@ -145,17 +148,17 @@ const Home = () => {
             >
               {[
                 {
-                  icon: '/icons/natural.svg',
+                  icon: <GiPlantWatering className="w-8 h-8 text-green-600" />,
                   title: '100% Natural',
                   description: 'Pure natural ingredients for your wellness'
                 },
                 {
-                  icon: '/icons/legal.svg',
+                  icon: <MdVerified className="w-8 h-8 text-blue-600" />,
                   title: '100% Legal',
                   description: 'Approved and certified for your safety'
                 },
                 {
-                  icon: '/icons/taste.svg',
+                  icon: <MdSentimentSatisfiedAlt className="w-8 h-8 text-yellow-600" />,
                   title: 'No Nasty Taste',
                   description: 'Pleasant experience with every use'
                 }
@@ -166,7 +169,7 @@ const Home = () => {
                   whileHover={{ scale: 1.02 }}
                 >
                   <div className="w-16 h-16 bg-white rounded-2xl shadow-lg flex items-center justify-center">
-                    <img src={feature.icon} alt={feature.title} className="w-8 h-8" />
+                    {feature.icon}
                   </div>
                   <div>
                     <h3 className="text-xl font-bold mb-2">{feature.title}</h3>

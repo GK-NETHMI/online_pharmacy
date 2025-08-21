@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiSearch, FiShoppingCart, FiUser } from 'react-icons/fi';
+import logopng from '../images/logo.png'; 
 
 const Header = () => {
   return (
@@ -9,14 +10,14 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <img src="/images/logo.png" alt="Logo" className="h-10" />
-            <span className="text-xl font-bold text-gray-800">Medi Trust</span>
+          <Link to="/" className="flex items-center space-x-4">
+            <img src={logopng} alt="Logo" className="h-16 w-auto" />
+            <span className="text-3xl font-bold text-gray-800">Medi Trust</span>
           </Link>
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link to="/home" className="text-gray-800 hover:text-[#FFD700] transition-colors">
+            <Link to="/" className="text-gray-800 hover:text-[#FFD700] transition-colors">
               Home
             </Link>
             <Link to="/product/all" className="text-gray-800 hover:text-[#FFD700] transition-colors">
